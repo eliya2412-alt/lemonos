@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LemonOS — מחשב בדפדפן</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Boot screen -->
+  <div id="boot" class="boot">
+    <div class="boot-logo">
+      <svg viewBox="0 0 100 100" width="86" height="86" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M30 34 L50 66 L70 34" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="boot-bar"><span id="bootFill"></span></div>
+    <div class="boot-hint">מאתחל את LemonOS…</div>
+  </div>
+
+  <!-- Login -->
+  <div id="login" class="login hidden">
+    <div class="login-card">
+      <div class="avatar">🍋</div>
+      <div class="login-name">LemonOS</div>
+      <div class="login-sub">לחץ כדי להיכנס</div>
+      <button id="loginBtn" class="btn primary">התחבר</button>
+    </div>
+  </div>
+
+  <!-- Desktop -->
+  <div id="desktop" class="desktop hidden">
+
+    <!-- Top bar -->
+    <div class="menubar">
+      <div class="menubar-left">
+        <span class="logo-mark" id="appleMenu">🍋</span>
+        <span class="menu-item" data-menu="system">מערכת</span>
+        <span class="menu-item" data-menu="view">תצוגה</span>
+        <span class="menu-item" data-menu="help">עזרה</span>
+        <span class="menu-title" id="activeAppName">Finder</span>
+      </div>
+      <div class="menubar-right">
+        <span class="status" id="statusClock">--:--</span>
+        <span class="status">🔋 100%</span>
+        <span class="status">📶</span>
+        <span class="status" id="statusUser">lemon</span>
+      </div>
+    </div>
+
+    <!-- Desktop icons -->
+    <div class="desktop-icons" id="desktopIcons"></div>
+
+    <!-- Windows layer -->
+    <div class="windows" id="windowsLayer"></div>
+
+    <!-- Context menu -->
+    <div class="context-menu hidden" id="contextMenu">
+      <div class="ctx-item" data-ctx="terminal">פתח טרמינל</div>
+      <div class="ctx-item" data-ctx="files">פתח קבצים</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item" data-ctx="wallpaper">שנה רקע</div>
+      <div class="ctx-item" data-ctx="about">אודות המערכת</div>
+    </div>
+
+    <!-- Dock -->
+    <div class="dock" id="dock"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
