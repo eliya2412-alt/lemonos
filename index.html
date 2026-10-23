@@ -3,71 +3,107 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LemonOS — מחשב בדפדפן</title>
+<title>LemonVM — Virtual Machines</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Boot screen -->
-  <div id="boot" class="boot">
-    <div class="boot-logo">
-      <svg viewBox="0 0 100 100" width="86" height="86" aria-hidden="true">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
-        <path d="M30 34 L50 66 L70 34" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="boot-bar"><span id="bootFill"></span></div>
-    <div class="boot-hint">מאתחל את LemonOS…</div>
+  <div class="aurora" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="grid-overlay"></span>
   </div>
 
-  <!-- Login -->
-  <div id="login" class="login hidden">
-    <div class="login-card">
-      <div class="avatar">🍋</div>
-      <div class="login-name">LemonOS</div>
-      <div class="login-sub">לחץ כדי להיכנס</div>
-      <button id="loginBtn" class="btn primary">התחבר</button>
-    </div>
-  </div>
-
-  <!-- Desktop -->
-  <div id="desktop" class="desktop hidden">
-
-    <!-- Top bar -->
-    <div class="menubar">
-      <div class="menubar-left">
-        <span class="logo-mark" id="appleMenu">🍋</span>
-        <span class="menu-item" data-menu="system">מערכת</span>
-        <span class="menu-item" data-menu="view">תצוגה</span>
-        <span class="menu-item" data-menu="help">עזרה</span>
-        <span class="menu-title" id="activeAppName">Finder</span>
+  <div class="appwin" id="app">
+    <header class="toolbar">
+      <div class="traffic" aria-hidden="true">
+        <span class="tl close"></span><span class="tl min"></span><span class="tl max"></span>
       </div>
-      <div class="menubar-right">
-        <span class="status" id="statusClock">--:--</span>
-        <span class="status">🔋 100%</span>
-        <span class="status">📶</span>
-        <span class="status" id="statusUser">lemon</span>
+      <button class="icon-btn" id="sidebarToggle" title="סרגל צד">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <div class="tb-title">
+        <span class="tb-strong" id="libTitle">Virtual Machines</span>
+        <span class="pill" id="libCount">0</span>
       </div>
+      <div class="tb-spacer"></div>
+      <label class="search" id="searchWrap">
+        <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="search" type="text" placeholder="חיפוש מכונה…" autocomplete="off" />
+        <kbd>⌘K</kbd>
+      </label>
+      <div class="segmented" id="viewToggle" role="tablist">
+        <button data-view="grid" class="active" title="גלריה">
+          <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor"/></svg>
+        </button>
+        <button data-view="list" title="רשימה">
+          <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="4" width="18" height="3" rx="1.5" fill="currentColor"/><rect x="3" y="10.5" width="18" height="3" rx="1.5" fill="currentColor"/><rect x="3" y="17" width="18" height="3" rx="1.5" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <button class="btn accent" id="newVmBtn">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        New VM
+      </button>
+    </header>
+
+    <div class="appbody">
+      <aside class="sidebar" id="sidebar">
+        <div class="side-scroll">
+          <div class="side-label">ספרייה</div>
+          <nav class="cat-list" id="catList"></nav>
+          <div class="side-label">אחסון</div>
+          <div class="storage">
+            <div class="storage-bar"><span id="storageFill"></span></div>
+            <div class="storage-text"><span id="storageUsed">0 GB</span><span>512 GB</span></div>
+          </div>
+          <div class="side-label">היפרוויזר</div>
+          <div class="hv-card">
+            <div class="hv-dot"></div>
+            <div>
+              <div class="hv-name">LemonVZ</div>
+              <div class="hv-sub">Virtualization · Web</div>
+            </div>
+          </div>
+        </div>
+        <div class="side-foot">
+          <div class="user-chip">
+            <span class="avatar-sm">🍋</span>
+            <div><div class="u-name">lemon</div><div class="u-sub">מקומי · לא מסונכרן</div></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="content-head">
+          <div>
+            <h1 id="contentTitle">כל המכונות</h1>
+            <p id="contentSub">בחר מכונה כדי להפעיל, להגדיר או למחוק</p>
+          </div>
+        </div>
+        <div class="gallery grid" id="gallery"></div>
+      </main>
+
+      <aside class="inspector" id="inspector"></aside>
     </div>
 
-    <!-- Desktop icons -->
-    <div class="desktop-icons" id="desktopIcons"></div>
-
-    <!-- Windows layer -->
-    <div class="windows" id="windowsLayer"></div>
-
-    <!-- Context menu -->
-    <div class="context-menu hidden" id="contextMenu">
-      <div class="ctx-item" data-ctx="terminal">פתח טרמינל</div>
-      <div class="ctx-item" data-ctx="files">פתח קבצים</div>
-      <div class="ctx-sep"></div>
-      <div class="ctx-item" data-ctx="wallpaper">שנה רקע</div>
-      <div class="ctx-item" data-ctx="about">אודות המערכת</div>
-    </div>
-
-    <!-- Dock -->
-    <div class="dock" id="dock"></div>
+    <footer class="statusbar">
+      <span id="statusLeft">LemonVM 2.0</span>
+      <span class="sb-spacer"></span>
+      <span id="statusMid"></span>
+      <span class="sb-spacer"></span>
+      <span id="statusRight"></span>
+    </footer>
   </div>
+
+  <div id="vmLayer" class="vm-layer"></div>
+
+  <div class="modal hidden" id="modal">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" id="modalCard"></div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
 
   <script src="app.js"></script>
 </body>
